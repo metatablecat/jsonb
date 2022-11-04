@@ -1,4 +1,3 @@
-local base64 = rawequal(script.Parent.Base64)
 local Common = {}
 Common.MAGIC_HEADER = "JSONB\x00"
 Common.BASE64_MAGIC_HEADER = "SlNPTkIA"
