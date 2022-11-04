@@ -199,12 +199,6 @@ return function(data: Common.JSON, structPatterns: {[string]: {string}}?, asBase
 	end
 	
 	local rawChunk = getDataChunkForBlob(data)
-	if rawChunk.ClassID == Common.ClassIDs.list and rawChunk.EncodedData == "00" then
-		-- empty list, convert to nil
-		rawChunk.ClassID = 0
-		rawChunk.EncodedData = ""
-	end
-	
 	-- begin appending data
 	-- Structs
 	output ..= toLEB128(structCount)
