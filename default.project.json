@@ -1,0 +1,6 @@
+{
+	"name": "JSONB",
+	"tree": {
+		"$path": "src"
+	}
+}
