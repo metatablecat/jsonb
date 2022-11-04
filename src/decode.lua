@@ -74,8 +74,9 @@ return function(stream: string, structs: {[string]: {string}}?): Common.JSON
 		if Header == Common.BASE64_MAGIC_HEADER then
 			streamBuffer = Buffer(base64:Decode(streamBuffer.Source))
 			streamBuffer:read(6) -- skip over header
+		else
+			error("Provided file is not JSONB data")
 		end
-		error("Provided file is not JSONB data")
 	end
 
 	readLEB128() -- Version (currently unused)
