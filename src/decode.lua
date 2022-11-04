@@ -45,7 +45,6 @@ end
 return function(stream: string, structs: {[string]: {string}}?): Common.JSON
 	local streamBuffer = Buffer(stream)
 	local structs = structs or {}
-	local output = {}
 	
 	local function readLEB128()
 		local result = 0
@@ -67,15 +66,19 @@ return function(stream: string, structs: {[string]: {string}}?): Common.JSON
 		return streamBuffer:read(len)
 	end
 	
-	local b64encoded = streamBuffer:read() == "T"
-	if b64encoded then
-		-- bit hacky but reshapes the buffer
-		local raw = base64:Decode(string.sub(streamBuffer.Source, 2))
-		streamBuffer = Buffer(raw)
-		streamBuffer:read() -- skip over the packed F byte
+	-- identify header type
+	local Header = streamBuffer:read(6)
+	if Header ~= Common.MAGIC_HEADER then
+		-- try to check against Base64 header
+		Header ..= streamBuffer:read(2)
+		if Header == Common.BASE64_MAGIC_HEADER then
+			streamBuffer = Buffer(base64:Decode(streamBuffer.Source))
+			streamBuffer:read(6) -- skip over header
+		end
+		error("Provided file is not JSONB data")
 	end
-	
-	local bversion = readLEB128()
+
+	readLEB128() -- Version (currently unused)
 	local structCount = readLEB128()
 	local structTable = table.create(structCount)
 	for i = 1, structCount do

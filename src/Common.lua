@@ -1,4 +1,7 @@
+local base64 = rawequal(script.Parent.Base64)
 local Common = {}
+Common.MAGIC_HEADER = "JSONB\x00"
+Common.BASE64_MAGIC_HEADER = "SlNPTkIA"
 
 export type JSON_Valid = nil|boolean|number|string|JSON_List|JSON_Object
 export type JSON_Object = {[string]: JSON_Valid}

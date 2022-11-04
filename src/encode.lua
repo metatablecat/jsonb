@@ -25,7 +25,7 @@ end
 local VERSION = toLEB128(0)
 
 return function(data: Common.JSON, structPatterns: {[string]: {string}}?, asBase64: boolean?): string
-	local output = "F" .. VERSION
+	local output = Common.MAGIC_HEADER .. VERSION
 	
 	local stringTable = {}
 	local realStringTable = {}
@@ -223,7 +223,7 @@ return function(data: Common.JSON, structPatterns: {[string]: {string}}?, asBase
 	output ..= string.char(rawChunk.ClassID) .. rawChunk.EncodedData
 	
 	if asBase64 then
-		return "T" .. base64:Encode(output)
+		return base64:Encode(output)
 	end
 	
 	return output

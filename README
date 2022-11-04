@@ -32,7 +32,7 @@ Conventions:
 
 A JSONB file has a basic structure:
 
-* `byte` - Base64 identifier (`T/F`)
+* `8 bytes` - Magic Header `JSONB\0`/`SlNPTkIA`
 * `varint` - Version
 * `varint` - Struct Count
 	* `4 bytes` - Struct Identifiers
@@ -40,10 +40,8 @@ A JSONB file has a basic structure:
 	* `string` - Length Prefixed strings
 * Raw Data
 
-### Base64 Identifier
-At the beginning of every JSONB file with a `T` or `F` flag, this is used to identify Base64 encoding. This exists because this format was designed to target Roblox, and DataStores do not like binary data.
-
-If the byte is `T`, it means all following data is base64 encoded data, the decoded data starts with an `F` denoting it is no longer base64 data.
+### Magic Header
+At the beginning of every file is the magic header. This is either 6 or 8 bits depending on how the data is encoded, if it's raw binary, this header will be `JSONB\0`, otherwise it will be `SlNPTkIA`
 
 ### Version
 Version is a simple `varint` denoting the version of the spec, this is used if we have to make any breaking changes to the spec. Right now, this is just `00`
