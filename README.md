@@ -32,7 +32,7 @@ Conventions:
 
 A JSONB file has a basic structure:
 
-* `8 bytes` - Magic Header `JSONB\0`/`SlNPTkIA`
+* `6-8 bytes` - Magic Header `JSONB\0`/`SlNPTkIA`
 * `varint` - Version
 * `varint` - Struct Count
 	* `4 bytes` - Struct Identifiers
