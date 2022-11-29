@@ -34,8 +34,6 @@ A JSONB file has a basic structure:
 
 * `6-8 bytes` - Magic Header `JSONB\0`/`SlNPTkIA`
 * `varint` - Version
-* `varint` - Struct Count
-	* `4 bytes` - Struct Identifiers
 * `varint` - String Count
 	* `string` - Length Prefixed strings
 * Raw Data
@@ -45,9 +43,6 @@ At the beginning of every file is the magic header. This is either 6 or 8 bits d
 
 ### Version
 Version is a simple `varint` denoting the version of the spec, this is used if we have to make any breaking changes to the spec. Right now, this is just `00`
-
-### Struct Count/Struct Identifiers
-Following a `varint` denoting the number of struct identifiers in the file, read the identifiers as `4 byte` strings. Structs start at index 1
 
 ### String Count/Strings
 Following a `varint` denoting the number of strings, read that many `varint` length prefixed strings and map it to a table. Strings start at index 1
@@ -99,7 +94,7 @@ Struct refers to a predefined struct key map defined in `encode`/`decode`
 They are similar to lists, except they have an identifier byte instead of length
 |Name|Type|Description|
 |-|-|-|
-|Identifier|`varint`|Identifier in the struct table|
+|Identifier|`varint`|Struct Identifier that should be declared from within the `decode` function|
 |Raw Data||`RawData`s that are read based on the shape of the struct table|
 
 ## Attributions

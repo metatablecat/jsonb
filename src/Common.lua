@@ -7,6 +7,10 @@ export type JSON_Object = {[string]: JSON_Valid}
 export type JSON_List = {JSON_Valid}
 export type JSON = JSON_Object|JSON_List
 
+Common.VERSION = 1
+Common.MIN_VERSION = 1
+Common.MAX_VERSION = 1
+
 Common.ClassIDs = {
 	["nil"] = 0,
 	["boolean"] = 1,

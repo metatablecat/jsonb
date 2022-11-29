@@ -42,7 +42,7 @@ local function Buffer(str): Buffer
 end
 
 
-return function(stream: string, structs: {[string]: {string}}?): Common.JSON
+return function(stream: string, structs: {[string|number]: {string}}?): Common.JSON
 	local streamBuffer = Buffer(stream)
 	local structs = structs or {}
 	
@@ -79,13 +79,9 @@ return function(stream: string, structs: {[string]: {string}}?): Common.JSON
 		end
 	end
 
-	readLEB128() -- Version (currently unused)
-	local structCount = readLEB128()
-	local structTable = table.create(structCount)
-	for i = 1, structCount do
-		local structIdentifier = streamBuffer:read(4)
-		assert(structs[structIdentifier], "Undeclared struct!")
-		structTable[i] = structIdentifier
+	local version = readLEB128()
+	if version < Common.MIN_VERSION or version > Common.MAX_VERSION then
+		error("Invalid spec version")
 	end
 	
 	local stringCount = readLEB128()
@@ -135,7 +131,7 @@ return function(stream: string, structs: {[string]: {string}}?): Common.JSON
 		elseif typeByte == Common.ClassIDs.struct then
 			local structIdx = readLEB128()
 			local object = {}
-			local keyMap = structs[structTable[structIdx]]
+			local keyMap = structs[structIdx]
 			
 			for _, key in keyMap do
 				object[key] = readDataChunk()

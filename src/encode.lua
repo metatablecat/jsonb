@@ -22,9 +22,9 @@ local function toLEB128(n: number): string
 end
 
 
-local VERSION = toLEB128(0)
+local VERSION = toLEB128(Common.VERSION)
 
-return function(data: Common.JSON, structPatterns: {[string]: {string}}?, asBase64: boolean?): string
+return function(data: Common.JSON, structPatterns: {{string}}?, asBase64: boolean?): string
 	local output = Common.MAGIC_HEADER .. VERSION
 	
 	local stringTable = {}
@@ -32,28 +32,19 @@ return function(data: Common.JSON, structPatterns: {[string]: {string}}?, asBase
 	local stringCount = 0
 	local structTable = {}
 	local structCount = 0
-	local rawData = {}
 	
 	if structPatterns then
-		for structKey, structMatch in structPatterns do
+		for _, structMatch in structPatterns do
 			-- cant use clone here because i need to push structCount
-			if string.len(structKey) ~= 4 then
-				error("Struct keys must be 4 bytes in length")
-			end
-			
 			structCount += 1
-			structTable[structCount] = {
-				Key = structKey,
-				Struct = structMatch
-			}
-			
+			structTable[structCount] = structMatch
 		end
 	end
 	
 	local function CheckShapeAgainstStructs(keys)
 		for idx, struct in structTable do
 			local matching = true
-			for _, key in struct.Struct do				
+			for _, key in struct do				
 				if not keys[key] then
 					matching = false					
 					break
@@ -61,7 +52,7 @@ return function(data: Common.JSON, structPatterns: {[string]: {string}}?, asBase
 			end
 			
 			if matching then
-				return idx, struct.Struct
+				return idx, struct
 			end
 		end
 	end
@@ -201,11 +192,8 @@ return function(data: Common.JSON, structPatterns: {[string]: {string}}?, asBase
 	local rawChunk = getDataChunkForBlob(data)
 	-- begin appending data
 	-- Structs
-	output ..= toLEB128(structCount)
-	for _, struct in structTable do
-		output ..= struct.Key
-	end
-	
+	-- Removed direct key matching in Version 2, number indexes are used now
+
 	-- Strings
 	output ..= toLEB128(stringCount)
 	for idx, str in realStringTable do
