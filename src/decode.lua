@@ -42,7 +42,7 @@ local function Buffer(str): Buffer
 end
 
 
-return function(stream: string, structs: {[string|number]: {string}}?): Common.JSON
+return function(stream: string, structs: {{string}}?): Common.JSON
 	local streamBuffer = Buffer(stream)
 	local structs = structs or {}
 	
