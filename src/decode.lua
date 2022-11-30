@@ -98,9 +98,9 @@ return function(stream: string, structs: {{string}}?): Common.JSON
 		elseif typeByte == Common.ClassIDs.boolean then
 			return string.byte(streamBuffer:read()) == 1
 		elseif typeByte == Common.ClassIDs.int32 then
-			return string.unpack("<I4", streamBuffer:read(4))
+			return string.unpack("<i4", streamBuffer:read(4))
 		elseif typeByte == Common.ClassIDs.int64 then
-			return string.unpack("<I8", streamBuffer:read(8))
+			return string.unpack("<i8", streamBuffer:read(8))
 		elseif typeByte == Common.ClassIDs.double then
 			return string.unpack("<d", streamBuffer:read(8))
 		elseif typeByte == Common.ClassIDs.string then

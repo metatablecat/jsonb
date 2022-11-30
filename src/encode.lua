@@ -178,11 +178,11 @@ return function(data: Common.JSON, structPatterns: {false|{string}}?, asBase64: 
 				elseif blob >= -(2^31) and blob <= (2^31)-1 then
 					-- int32
 					DataChunk.ClassID = Common.ClassIDs.int32
-					DataChunk.EncodedData = string.pack("<I4", blob)
+					DataChunk.EncodedData = string.pack("<i4", blob)
 				else
 					-- int64
 					DataChunk.ClassID = Common.ClassIDs.int64
-					DataChunk.EncodedData = string.pack("<I8", blob)
+					DataChunk.EncodedData = string.pack("<i8", blob)
 				end
 			elseif PrimitiveBinding == Common.ClassIDs.string then
 				local blob = blob :: string
