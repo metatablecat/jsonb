@@ -21,6 +21,14 @@ local function toLEB128(n: number): string
 	return output
 end
 
+local function Setify(t)
+	local out = {}
+	for _, k in t do
+		out[k] = true
+	end
+
+	return out
+end
 
 local VERSION = toLEB128(Common.VERSION)
 
@@ -37,16 +45,16 @@ return function(data: Common.JSON, structPatterns: {{string}}?, asBase64: boolea
 		for _, structMatch in structPatterns do
 			-- cant use clone here because i need to push structCount
 			structCount += 1
-			structTable[structCount] = structMatch
+			structTable[structCount] = Setify(structMatch)
 		end
 	end
 	
 	local function CheckShapeAgainstStructs(keys)
 		for idx, struct in structTable do
 			local matching = true
-			for _, key in struct do				
-				if not keys[key] then
-					matching = false					
+			for key in keys do	
+				if not struct[key] then
+					matching = false
 					break
 				end
 			end
@@ -118,7 +126,7 @@ return function(data: Common.JSON, structPatterns: {{string}}?, asBase64: boolea
 					DataChunk.ClassID = Common.ClassIDs.struct
 					DataChunk.EncodedData = toLEB128(structIDX)
 					
-					for _, key in structKeys do
+					for key in structKeys do
 						DataChunk.EncodedData ..= sectors[key]
 					end
 				else
