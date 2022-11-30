@@ -1,6 +1,7 @@
 local Common = {}
 Common.MAGIC_HEADER = "JSONB\x00"
 Common.BASE64_MAGIC_HEADER = "SlNPTkIA"
+Common.ENCODER_RESERVED_SLOT = newproxy(false)
 
 export type JSON_Valid = nil|boolean|number|string|JSON_List|JSON_Object
 export type JSON_Object = {[string]: JSON_Valid}

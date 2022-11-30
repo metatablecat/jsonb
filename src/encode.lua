@@ -32,7 +32,7 @@ end
 
 local VERSION = toLEB128(Common.VERSION)
 
-return function(data: Common.JSON, structPatterns: {{string}}?, asBase64: boolean?): string
+return function(data: Common.JSON, structPatterns: {false|{string}}?, asBase64: boolean?): string
 	local output = Common.MAGIC_HEADER .. VERSION
 	
 	local stringTable = {}
@@ -43,8 +43,8 @@ return function(data: Common.JSON, structPatterns: {{string}}?, asBase64: boolea
 	
 	if structPatterns then
 		for _, structMatch in structPatterns do
-			-- cant use clone here because i need to push structCount
 			structCount += 1
+			if structMatch == Common.ENCODER_RESERVED_SLOT then continue end
 			structTable[structCount] = Setify(structMatch)
 		end
 	end

@@ -1,4 +1,5 @@
 local JSONB = {}
+local Common = require(script.Common)
 
 --[[
 	JSONB
@@ -13,5 +14,6 @@ local JSONB = {}
 
 JSONB.encode = require(script.encode)
 JSONB.decode = require(script.decode)
+JSONB.reserved = Common.ENCODER_RESERVED_SLOT
 
 return JSONB
