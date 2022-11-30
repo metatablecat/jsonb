@@ -7,11 +7,11 @@ This library was made for Roblox, which means it's coded in Luau. A specificatio
 To use the included library, simply drag the built `RBXM` file into your game or clone the source code and sync using Rojo.
 
 This library has two simple functions:
-* `encode(data: {[any]: any}, structs: {[string]: {string}}?, asBase64: boolean?) -> string`
+* `encode(data: {[any]: any}, structs: {{string}}?, asBase64: boolean?) -> string`
 	
 	Returns an encoded JSONB file from a given table, can output as base64 based on the `asBase64` flag, and can take a map of structs that are matched against objects.
 
-* `decode(data: {[any]: any}, structs: {[string]: {string}}?) -> {[any]: any}`
+* `decode(data: {[any]: any}, structs: {{string}}?) -> {[any]: any}`
 
 	Returns a table from the decoded JSONB file, if any structs are declared in the file, they MUST be present in the function for the decoder to work
 
@@ -42,7 +42,7 @@ A JSONB file has a basic structure:
 At the beginning of every file is the magic header. This is either 6 or 8 bits depending on how the data is encoded, if it's raw binary, this header will be `JSONB\0`, otherwise it will be `SlNPTkIA`
 
 ### Version
-Version is a simple `varint` denoting the version of the spec, this is used if we have to make any breaking changes to the spec. Right now, this is just `00`
+Version is a simple `varint` denoting the version of the spec, this is used if we have to make any breaking changes to the spec. We're currently on version 1, version 0 support can be found on older builds of the library.
 
 ### String Count/Strings
 Following a `varint` denoting the number of strings, read that many `varint` length prefixed strings and map it to a table. Strings start at index 1
